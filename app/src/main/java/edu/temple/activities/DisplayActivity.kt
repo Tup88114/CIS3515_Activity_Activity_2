@@ -4,10 +4,20 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
+import android.content.Intent
+import androidx.activity.result.contract.ActivityResultContracts
+
 
 class DisplayActivity : AppCompatActivity() {
 
     // TODO Step 1: Launch TextSizeActivity when button clicked to allow selection of text size value
+    val launcher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            result ->
+        if (result.resultCode == RESULT_OK) {
+            val size = result.data?.getIntExtra("TEXT_SIZE", 16) ?: 16
+            lyricsDisplayTextView.textSize = size.toFloat()
+        }
+    }
 
     // TODO Step 3: Use returned value for lyricsDisplayTextView text size
 
@@ -21,5 +31,9 @@ class DisplayActivity : AppCompatActivity() {
         lyricsDisplayTextView = findViewById(R.id.lyricsDisplayTextView)
         textSizeSelectorButton = findViewById(R.id.textSizeSelectorButton)
 
+        textSizeSelectorButton.setOnClickListener {
+            val intent = Intent(this, TextSizeActivity::class.java)
+            launcher.launch(intent)
+        }
     }
 }

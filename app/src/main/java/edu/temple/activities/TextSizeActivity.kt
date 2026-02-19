@@ -20,11 +20,15 @@ class TextSizeActivity : AppCompatActivity() {
 
         Log.d("Array values", textSizes.contentToString())
 
-        with (findViewById(R.id.textSizeSelectorRecyclerView) as RecyclerView) {
+        with (findViewById<RecyclerView>(R.id.textSizeSelectorRecyclerView)!!) {
 
             // TODO Step 2: Pass selected value back to activity that launched TextSizeActivity
-            adapter = TextSizeAdapter(textSizes){
-
+            adapter = TextSizeAdapter(textSizes){ selectedSize ->
+                val resultIntent = intent.apply {
+                    putExtra("TEXT_SIZE", selectedSize)
+                }
+                setResult(RESULT_OK, resultIntent)
+                finish()
             }
             layoutManager = LinearLayoutManager(this@TextSizeActivity)
         }
